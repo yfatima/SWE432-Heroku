@@ -3,7 +3,7 @@
 
         @author Jeff Offutt
 ********************************************************************* */
-
+package servlet;
 // Import Java Libraries
 import java.io.*;
 import java.util.*;
@@ -28,18 +28,13 @@ import javax.servlet.annotation.WebServlet;
 //              Fields are filled from the parameters.
 // private void PrintTail (PrintWriter out) --> Prints the HTML bottom
 //***********************************************************************
-//@WebServlet(name = "FirstServlet", urlPatterns = {"/Hello"})
+@WebServlet(name = "twoButtons", urlPatterns = {"/twoStrings"})
 public class twoButtons extends HttpServlet
 {
 
-// Location of servlet.
-//static String Domain  = "cs.gmu.edu:8443";
-static String Path    = "swe432-yf.herokuapp.com/";
-static String Servlet = "twoButtons";
-
 // Button labels
-static String OperationAdd = "Add";
-static String OperationSub = "Subtract";
+static String OperationAdd = "StringAStringB";
+static String OperationAdd2 = "StringBStringA";
 
 // Other strings.
 static String Style ="https://www.cs.gmu.edu/~offutt/classes/432/432-style.css";
@@ -53,30 +48,24 @@ static String Style ="https://www.cs.gmu.edu/~offutt/classes/432/432-style.css";
 public void doPost (HttpServletRequest request, HttpServletResponse response)
    throws ServletException, IOException
 {
-   Float rslt   = new Float(0.0);
-   Float lhsVal = new Float(0.0);
-   Float rhsVal = new Float(0.0);
+   String addStr   = new String("");
    String operation = request.getParameter("Operation");
-   String lhsStr = request.getParameter("LHS");
-   String rhsStr = request.getParameter("RHS");
-   if ((lhsStr != null) && (lhsStr.length() > 0))
-      lhsVal = new Float(lhsStr);
-   if ((rhsStr != null) && (rhsStr.length() > 0))
-      rhsVal = new Float(rhsStr);
-
+   String str1 = request.getParameter("STR1");
+   String str2 = request.getParameter("STR2");
    if (operation.equals(OperationAdd))
    {
-      rslt = new Float(lhsVal.floatValue() + rhsVal.floatValue());
+      addStr = new String(str1 + str2);
    }
-   else if (operation.equals(OperationSub))
+   else if (operation.equals(OperationAdd2))
    {
-      rslt = new Float(lhsVal.floatValue() - rhsVal.floatValue());
+      addStr = new String(str2 + str1);
    }
 
    response.setContentType("text/html");
    PrintWriter out = response.getWriter();
    PrintHead(out);
-   PrintBody(out, lhsStr, rhsStr, rslt.toString());
+   System.out.println(str1);
+   PrintBody(out, str1, str2, addStr);
    PrintTail(out);
 }  // End doPost
 
@@ -103,7 +92,7 @@ private void PrintHead (PrintWriter out)
    out.println("");
 
    out.println("<head>");
-   out.println("<title>Two buttons example</title>");
+   out.println("<title>Two strings example</title>");
    out.println(" <link rel=\"stylesheet\" type=\"text/css\" href=\"" + Style + "\">");
    out.println("</head>");
    out.println("");
@@ -113,35 +102,34 @@ private void PrintHead (PrintWriter out)
  *  Prints the <BODY> of the HTML page with the form data
  *  values from the parameters.
 ********************************************************* */
-private void PrintBody (PrintWriter out, String lhs, String rhs, String rslt)
+private void PrintBody (PrintWriter out, String str1, String str2, String addStr)
 {
    out.println("<body>");
    out.println("<p>");
-   out.println("A simple example that demonstrates how to operate with");
-   out.println("multiple submit buttons.");
+   out.println("A simple example that demonstrates how to concatenate");
+   out.println("two strings.");
    out.println("</p>");
    out.print  ("<form method=\"post\"");
-   out.println(" action=\"https://" + Path + Servlet + "\">");
+   out.println(" action=\"twoStrings\"");
    out.println("");
    out.println(" <table>");
    out.println("  <tr>");
-   out.println("   <td>First value:");
-   out.println("   <td><input type=\"text\" name=\"LHS\" value=\"" + lhs + "\" size=5>");
-   out.println("  </tr>");
+   out.println("   <td>StringA:");
+   out.println("   <td><input type=\"text\" name=\"STR1\" value=\"" + str1 + "\" size=10>");
+   out.println("  </tr><br>");
    out.println("  <tr>");
-   out.println("   <td>Second value:");
-   out.println("   <td><input type=\"text\" name=\"RHS\" value=\"" + rhs + "\" size=5>");
-   out.println("  </tr>");
+   out.println("   <td>StringB:");
+   out.println("   <td><input type=\"text\" name=\"STR2\" value=\"" + str2 + "\" size=10>");
+   out.println("  </tr><br>");
    out.println("  <tr>");
    out.println("   <td>Result:");
-   out.println("   <td><input type=\"text\" name=\"RHS\" value=\"" + rslt + "\" size=6>");
+   out.println("   <td><input type=\"text\" name=\"STR2\" value=\"" + addStr + "\" size=20>");
    out.println("  </tr>");
    out.println(" </table>");
    out.println(" <br>");
    out.println(" <br>");
    out.println(" <input type=\"submit\" value=\"" + OperationAdd + "\" name=\"Operation\">");
-   out.println(" <input type=\"submit\" value=\"" + OperationSub + "\" name=\"Operation\">");
-   out.println(" <input type=\"reset\" value=\"Reset\" name=\"reset\">");
+   out.println(" <input type=\"submit\" value=\"" + OperationAdd2 + "\" name=\"Operation\">");
    out.println("</form>");
    out.println("");
    out.println("</body>");
