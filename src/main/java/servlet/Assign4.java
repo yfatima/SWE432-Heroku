@@ -109,7 +109,13 @@ public void doPost (HttpServletRequest request, HttpServletResponse response)
 	tmp = getRandomString(outputList);
 	pickedAlready.add(tmp);
 	outputList.clear();
-	outputList.add(tmp);
+	if (tmp.equals("")) {
+		outputList.add("No more new strings to display");
+	}
+	else {
+		outputList.add(tmp);
+	}
+	
    	
    }
    if (op.equals(Option4)) {
