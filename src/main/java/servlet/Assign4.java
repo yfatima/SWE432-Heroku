@@ -16,7 +16,7 @@ import javax.servlet.annotation.WebServlet;
 
 import java.util.ArrayList;
 
-// twoButtons class
+// Assign4 class
 // CONSTRUCTOR: no constructor specified (default)
 //
 // ***************  PUBLIC OPERATIONS  **********************************
@@ -34,7 +34,7 @@ import java.util.ArrayList;
 public class Assign4 extends HttpServlet
 {
 
-// Button labels
+// static string lists labels
 
  static ArrayList<String> strList = new ArrayList<String>();
  static ArrayList<String> pickedAlready = new ArrayList<String>();
@@ -45,7 +45,7 @@ public class Assign4 extends HttpServlet
  static String OperationSubmit = "Submit";
  static String OperationReset = "Reset";
 
-
+ static String Option0 = "default";
  static String Option1 = "Random String"; 
  static String Option2 = "Random String with Replacement";
  static String Option3 = "Random String without Replacement";
@@ -169,7 +169,7 @@ public ArrayList<String> numericSort(ArrayList<String> list) {
     		rtn.add(String.valueOf(q));
 		}
 	} catch (Exception e) {
-		rtn.add("no numeric strings present in the list.");
+		rtn.add("no numeric strings present in the list");
 	}
 
     return rtn;
@@ -209,7 +209,7 @@ private void PrintHead (PrintWriter out)
 private void PrintBody (PrintWriter out, ArrayList<String> strList, ArrayList<String> outputList)
 {
 
-		out.println("<body>");
+		out.println("<body style=\"text-align:center; background-color:#e0bbe4;\">");
 		out.println("<h1> Welcome to SWE 432! </h1>");
 		out.println("<p>Instructions:</p><p>Type one string at a time and click the add button</p>");
 		out.print  ("<form method=\"post\" action=\"getStrings\">");
@@ -220,8 +220,9 @@ private void PrintBody (PrintWriter out, ArrayList<String> strList, ArrayList<St
 		out.println("<p>" + strList + "</p>");
 		out.println("<br>");
 		out.println("<br>");
-		out.println("<label> Choose one to display: </label>");
+		out.println("<label> Perform actions on the strings: </label>");
 		out.println("<select id=\"options\" name=\"Options\" >");
+		out.println("<option value=\"" + Option0 + "\" selected disabled hidden> Choose one </option>");
 		out.println("<option value=\"" + Option1 + "\"> Random String </option>");
 		out.println("<option value=\"" + Option2 + "\">  Random String with Replacement </option>");
 		out.println("<option value=\"" + Option3 + "\">  Random String without Replacement </option>");
@@ -239,10 +240,10 @@ private void PrintBody (PrintWriter out, ArrayList<String> strList, ArrayList<St
 		out.println("<br>");
 		out.println("<br>");
 		out.println("<p> Yumna Fatima, Shruti Gupta, Samapriya Dandibhotla </p>");
-		out.println("<p> We had two meetings together to work on this assignment. One person shared the screen and the other two gave ideas and helped write the code. Also, all design decisions were made collaboratively. We made a github repository to share the index.html file with all the group members </p>");
+		out.println("<p> We had two meetings together to work on this assignment. One person shared the screen and the other two gave ideas and helped write the code. Also, all design decisions were made collaboratively. We made a github repository to share the servlet java file with all the group members </p>");
 		out.println("</body>");
 		out.println("</html>");
    
 } // End PrintBody
 
-}  // End twoButtons
+}  // getStrings
