@@ -16,7 +16,9 @@ import javax.servlet.annotation.WebServlet;
 
 import java.util.ArrayList;
 
-// Assign4 class
+import com.google.gson.Gson;
+
+// Assign6 class
 // CONSTRUCTOR: no constructor specified (default)
 //
 // ***************  PUBLIC OPERATIONS  **********************************
@@ -30,9 +32,12 @@ import java.util.ArrayList;
 //              Fields are filled from the parameters.
 // private void PrintTail (PrintWriter out) --> Prints the HTML bottom
 //***********************************************************************
-@WebServlet(name = "Assign4", urlPatterns = {"/getStrings"})
-public class Assign4 extends HttpServlet
+@WebServlet(name = "Assign6", urlPatterns = {"/jsonfile"})
+public class Assign6 extends HttpServlet
 {
+ 
+ //json file name
+ static String RESOURCE_FILE = "entries.json";
 
 // static string lists labels
 
@@ -44,6 +49,9 @@ public class Assign4 extends HttpServlet
  static String OperationGetItem = "Get Selected Item";
  static String OperationSubmit = "Submit";
  static String OperationReset = "Reset";
+ static String OperationJson = "Jsonfile";
+ static String OperationClearJson = "ClearJson";
+ 
 
  static String Option0 = "default";
  static String Option1 = "Random String"; 
@@ -54,7 +62,98 @@ public class Assign4 extends HttpServlet
  static String Option6 = "Numeric Sorted Order";
  static String Option7 = "Eliminate Duplicates Sorted Order";
 // Other strings.
-static String Style ="";
+ static String Style ="";
+
+public class Entry {
+	String action;
+    ArrayList<String> result;
+}
+
+public class Entries{
+	List<Entry> entries;
+}
+
+public class EntryManager{
+	private String filePath = null;
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+	public Entries save(String action, ArrayList<String> result){
+      Entries entries = getAll();
+      Entry newEntry = new Entry();
+      newEntry.action = action;
+      newEntry.result = result;
+      entries.entries.add(newEntry);
+      try{
+        FileWriter fileWriter = new FileWriter(filePath);
+        new Gson().toJson(entries, fileWriter);
+        fileWriter.flush();
+        fileWriter.close();
+      }catch(IOException ioException){
+        return null;
+      }
+
+      return entries;
+    }
+    
+    private Entries getAll(){
+      Entries entries = new Entries();
+      entries.entries = new ArrayList();
+
+      try{
+        File file = new File(filePath);
+        if(!file.exists()){
+          return entries;
+        }
+
+        BufferedReader bufferedReader =
+          new BufferedReader(new FileReader(file));
+          Entries readEntries =
+          new Gson().fromJson(bufferedReader, Entries.class);
+
+        if(readEntries != null && readEntries.entries != null){
+          entries = readEntries;
+        }
+        bufferedReader.close();
+
+      }catch(IOException ioException){
+      }
+
+      return entries;
+    }
+
+	public String getAllAsHTMLTable(Entries entries){
+      StringBuilder htmlOut = new StringBuilder("<table>");
+      htmlOut.append("<tr><th>User Option</th><th>Result</th></tr>");
+      if(entries == null
+          || entries.entries == null || entries.entries.size() == 0){
+        htmlOut.append("<tr><td>No entries yet.</td></tr>");
+      }else{
+        for(Entry entry: entries.entries){
+           htmlOut.append(
+           "<tr><td>"+entry.action+"</td><td>"+entry.result+"</td></tr>");
+        }
+      }
+      htmlOut.append("</table>");
+      return htmlOut.toString();
+    }
+    
+    public void clear() {
+     try{
+     	Entries entries = null;
+        FileWriter fileWriter = new FileWriter(filePath);
+        new Gson().toJson(entries, fileWriter);
+        fileWriter.flush();
+        fileWriter.close();
+      }catch(IOException ioException){
+      }
+     
+    	
+    }
+
+}
 
 /** *****************************************************
  *  Overrides HttpServlet's doPost().
@@ -88,6 +187,10 @@ public void doPost (HttpServletRequest request, HttpServletResponse response)
    
    //System.out.println(operation);
    if (operation.equals(OperationSubmit)) {
+   
+   if (op.equals(Option0)) {
+   	outputList.add("Please choose an option from the dropdown!");
+   }
 	
    if (op.equals(Option1) || op.equals(Option2)) {
    	//call random string method
@@ -142,8 +245,38 @@ public void doPost (HttpServletRequest request, HttpServletResponse response)
    
    response.setContentType("text/html");
    PrintWriter out = response.getWriter();
-   PrintHead(out);
-   PrintBody(out, strList, outputList);
+   
+   EntryManager entryManager = new EntryManager();
+   entryManager.setFilePath(RESOURCE_FILE);
+   
+
+    
+   if (operation.equals(OperationJson)) {
+    Entries newEntries=  entryManager.getAll();
+    printResponseBody(out, entryManager.getAllAsHTMLTable(newEntries));
+   }
+ 	
+   
+	if (operation.equals(OperationSubmit)) {
+   	PrintHead(out);
+    Entries newEntries=entryManager.save(op, outputList);
+	PrintBody(out, strList, outputList);
+	}
+	
+	if (operation.equals(OperationAdd) || operation.equals(OperationReset)) {
+		PrintBody(out, strList, outputList);
+	}
+   
+   	if (operation.equals(OperationClearJson)) {
+   		entryManager.clear();
+   		Entries newEntries=  entryManager.getAll();
+    	printResponseBody(out, entryManager.getAllAsHTMLTable(newEntries));
+   	}
+    
+   	
+    
+   //PrintBody(out, strList, outputList);
+   
 }  // End doPost
 
 
@@ -218,7 +351,7 @@ private void PrintBody (PrintWriter out, ArrayList<String> strList, ArrayList<St
 		out.println("<body style=\"text-align:center; background-color:#e0bbe4;\">");
 		out.println("<h1> Welcome to SWE 432! </h1>");
 		out.println("<p>Instructions:</p><p>Type one string at a time and click the add button</p>");
-		out.print  ("<form method=\"post\" action=\"getStrings\">");
+		out.print  ("<form method=\"post\" action=\"jsonfile\">");
 		out.println("<label> Enter a string: </label>");
 		out.println(" <input type=\"text\" name=\"strInput\">");
 		out.println(" <input type=\"submit\" value=\"" + OperationAdd + "\" name=\"Operation\">");
@@ -228,7 +361,7 @@ private void PrintBody (PrintWriter out, ArrayList<String> strList, ArrayList<St
 		out.println("<br>");
 		out.println("<label> Perform actions on the strings: </label>");
 		out.println("<select id=\"options\" name=\"Options\" >");
-		out.println("<option value=\"" + Option0 + "\" selected disabled hidden> Choose one </option>");
+		out.println("<option value=\"" + Option0 + "\" selected> Choose one </option>");
 		out.println("<option value=\"" + Option1 + "\"> Random String </option>");
 		out.println("<option value=\"" + Option2 + "\">  Random String with Replacement </option>");
 		out.println("<option value=\"" + Option3 + "\">  Random String without Replacement </option>");
@@ -238,6 +371,8 @@ private void PrintBody (PrintWriter out, ArrayList<String> strList, ArrayList<St
 		out.println("<option value=\"" + Option7 + "\">  Eliminate Duplicates Sorted Order</option>");
 		out.println("</select>");
 		out.println(" <input type=\"submit\" value=\"" + OperationSubmit + "\" name=\"Operation\">"); 
+		out.println(" <input type=\"submit\" value=\"" + OperationJson + "\" name=\"Operation\">"); 
+		out.println(" <input type=\"submit\" value=\"" + OperationClearJson + "\" name=\"Operation\">"); 
 		out.println("<br>");
 		out.println("<br>");
 		out.println("<label> Result: </label>");
@@ -246,10 +381,24 @@ private void PrintBody (PrintWriter out, ArrayList<String> strList, ArrayList<St
 		out.println("<br>");
 		out.println("<br>");
 		out.println("<p> Yumna Fatima, Shruti Gupta, Samapriya Dandibhotla </p>");
-		out.println("<p> We had two meetings together to work on this assignment. One person shared the screen and the other two gave ideas and helped write the code. Also, all design decisions were made collaboratively. We made a github repository to share the servlet java file with all the group members </p>");
+		out.println("<p> We had two meetings together to work on this assignment. One person shared the screen and the other two gave ideas and helped write the code. Also, all design decisions were made collaboratively. We made a github repository to share the Assign6 servlet file with all the group members </p>");
 		out.println("</body>");
 		out.println("</html>");
    
 } // End PrintBody
 
-}  // getStrings
+  /** *****************************************************
+   *  Prints the <BODY> of the HTML page with persisted entries
+  ********************************************************* */
+private void printResponseBody (PrintWriter out, String tableString){
+	out.println("<body>");
+    out.println("<p>");
+    out.println("A simple example that shows entries from a JSON file");
+    out.println("</p>");
+    out.println("");
+    out.println(tableString);
+    out.println("");
+    out.println("</body>");
+}// End Response Body
+
+}  // json
