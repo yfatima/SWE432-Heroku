@@ -45,7 +45,7 @@ public void doGet (HttpServletRequest request, HttpServletResponse response)
 
       // Create a link so the user can create a new session.
       // The link will have a parameter builtin
-      String lifeCycleURL = "/swe432-yf.herokuapp.com/attributeServlet";
+      String lifeCycleURL = "https://swe432-yf.herokuapp.com/swe432-yf.herokuapp.com/attributeServlet";
       out.println("<a href=\"" + lifeCycleURL + "?action=newSession\">");
       out.println("Create new session</A>");
 
@@ -130,7 +130,7 @@ public void doGet (HttpServletRequest request, HttpServletResponse response)
       out.println(att_major);
    } //end while
    
-      String lifeCycleURL = "/swe432-yf.herokuapp.com/attributeServlet";
+      String lifeCycleURL = "https://swe432-yf.herokuapp.com/swe432-yf.herokuapp.com/attributeServlet";
       out.print  ("<br><br><a href=\"" + lifeCycleURL + "?action=invalidate\">");
       out.println("Invalidate the session</a>");
       out.print  ("<br><a href=\"" + lifeCycleURL + "\">");
