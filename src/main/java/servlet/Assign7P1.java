@@ -39,7 +39,7 @@ public class Assign7P1 extends HttpServlet
  static ArrayList<String> pickedAlready = new ArrayList<String>();
  static ArrayList<String> outputList = new ArrayList<String>();
 
- static String OperationAdd = "Add";
+ static public String OperationAdd = "Add";
  static String OperationGetItem = "Get Selected Item";
  static String OperationSubmit = "Submit";
 
@@ -63,8 +63,11 @@ static String Style ="";
 public void doPost (HttpServletRequest request, HttpServletResponse response)
    throws ServletException, IOException
 {
-   request.setAttribute("Request-Attribute", "Value of Attribute");
-   RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/Assign7P2");
+   request.setAttribute("mainlist", strList);
+   request.setAttribute("pickedlist", pickedAlready);
+   request.setAttribute("ouputlist", outputList);
+   
+   RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/getStrings2");
    dispatcher.forward(request, response);
    
 }  // End doPost

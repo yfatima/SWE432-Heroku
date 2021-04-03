@@ -64,10 +64,11 @@ public void doPost (HttpServletRequest request, HttpServletResponse response)
    throws ServletException, IOException
 {
 
-   Object attributeValue = request.getAttribute("Request-Attribute");
-   System.out.println(attributeValue);
+   Object mainlist = request.getAttribute("mainlist");
+   Object pickedlist = request.getAttribute("pickedlist");
+   Object outputlist = request.getAttribute("outputlist");
    
-   /*String tmp = "";
+   String tmp = "";
 
    outputList.clear();
 
@@ -126,12 +127,12 @@ public void doPost (HttpServletRequest request, HttpServletResponse response)
 		outputList = remDupSort(strList);	
 	}
 
-   }*/
+   }
 
    response.setContentType("text/html");
    PrintWriter out = response.getWriter();
    PrintHead(out);
-   //PrintBody(out, strList, outputList);*/ 
+   PrintBody(out, strList, outputList);
    
 }  // End doPost
 
@@ -220,7 +221,7 @@ private void PrintBody (PrintWriter out, ArrayList<String> strList, ArrayList<St
 		out.println("<br>");
 		out.println("<br>");
 		out.println("<p> Yumna Fatima, Shruti Gupta, Samapriya Dandibhotla </p>");
-		out.println("<p> We had two meetings together to work on this assignment. One person shared the screen and the other two gave ideas and helped write the code. Also, all design decisions were made collaboratively. We made a github repository to share the index.html file with all the group members </p>");
+		out.println("<p> We had two meetings together to work on this assignment 7. One person shared the screen and the other two gave ideas and helped write the code. Also, all design decisions were made collaboratively. Both of out servlet files Assign7P1 and Assign7P2 cna be found in our Github repository. </p>");
 		out.println("</body>");
 		out.println("</html>");
 
