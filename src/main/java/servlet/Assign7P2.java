@@ -41,6 +41,7 @@ public class Assign7P2 extends HttpServlet
 
  static String OperationAdd = "Add";
  static String OperationGetItem = "Get Selected Item";
+ static String OperationReset = "Reset";
  static String OperationSubmit = "Submit";
 
 
@@ -81,6 +82,13 @@ public void doPost (HttpServletRequest request, HttpServletResponse response)
    	//System.out.println(strInput);
    	strList.add(strInput);
    }
+   
+   if (operation.equals(OperationReset)) {
+   	//System.out.println(strInput);
+   	strList.clear();
+   	pickedAlready.clear();
+   } 
+   
    //System.out.println(operation);
    if (operation.equals(OperationSubmit)) {
 
@@ -199,6 +207,7 @@ private void PrintBody (PrintWriter out, ArrayList<String> strList, ArrayList<St
 		out.println("<label> Enter a string: </label>");
 		out.println(" <input type=\"text\" name=\"strInput\">");
 		out.println(" <input type=\"submit\" value=\"" + OperationAdd + "\" name=\"Operation\">");
+		out.println(" <input type=\"submit\" value=\"" + OperationReset + "\" name=\"Operation\">");
 		out.println("<p>" + strList + "</p>");
 		out.println("<br>");
 		out.println("<br>");

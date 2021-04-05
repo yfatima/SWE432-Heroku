@@ -41,6 +41,7 @@ public class Assign7P1 extends HttpServlet
 
  static public String OperationAdd = "Add";
  static String OperationGetItem = "Get Selected Item";
+ static String OperationReset = "Reset";
  static String OperationSubmit = "Submit";
 
 
@@ -115,6 +116,7 @@ private void PrintBody (PrintWriter out, ArrayList<String> strList, ArrayList<St
 		out.println("<label> Enter a string: </label>");
 		out.println(" <input type=\"text\" name=\"strInput\">");
 		out.println(" <input type=\"submit\" value=\"" + OperationAdd + "\" name=\"Operation\">");
+		out.println(" <input type=\"submit\" value=\"" + OperationReset + "\" name=\"Operation\">");
 		out.println("<p>" + strList + "</p>");
 		out.println("<br>");
 		out.println("<br>");
