@@ -32,7 +32,7 @@ import javax.servlet.annotation.WebServlet;
 public class finalPrac extends HttpServlet
 {
 
-// Button labels
+
 static String OperationAdd = "String1String2String3";
 static String OperationAdd2 = "String1String3String2";
 static String OperationAdd3 = "String2String1String3";
@@ -140,8 +140,8 @@ private void PrintHead (PrintWriter out)
 ********************************************************* */
 private void PrintBody (PrintWriter out, String str1, String str2, String str3, String addStr)
 {
-   out.println("<body>");
-   out.println("<p>");
+   out.println("<body style=\"text-align:center; background-color:#e0bbe4;\">");
+   out.println("<p style=\"text-align:center;\">");
    out.println("A simple example that demonstrates how to concatenate");
    out.println("three strings.");
    out.println("</p>");
